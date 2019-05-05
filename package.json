@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/jeff-hykin/json-editor#readme",
   "dependencies": {
+    "aphrodite-jss": "^2.1.0",
     "good-component": "^1.0.1",
     "good-jsx": "^1.0.8",
     "vue": "^2.6.10"
