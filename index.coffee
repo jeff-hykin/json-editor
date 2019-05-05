@@ -2,6 +2,40 @@ newComponent = require 'good-component'
 Jss = require 'aphrodite-jss'
 
 # 
+# types
+# 
+    # every slot is one of:
+        # null
+        # number
+        # text
+        # list
+        # object
+    # every slot has 
+        # a type picker
+        # a value area
+        # a remove button
+    # lists have a "new item" button
+    # named lists have a "new item" button
+
+
+# 
+# TODO
+# 
+    # Delete functionality
+        # create the delete button and styles
+        # create the delete event
+        # create the listener for the event
+        # handle the re-indexing of elements in a list
+    # Named slots
+        # Change how the event handling of value works, add a location to the change
+        # Create the name input box
+        # Add the tracking of the sub value
+    # improve text boxes
+        # increase font size
+        # convert them to text-areas
+        # make them auto-expand
+    
+# 
 # Styles
 # 
 heightOfMenu = '9rem'
@@ -20,7 +54,11 @@ sheet = Jss.StyleSheet.create
         fontFamily: 'sans-serif'
         transition: 'all 500ms ease-in'
         margin: '0.3rem'
-        marginBottom: '1rem'
+        marginBottom: '0.8rem'
+    area:
+        display: 'flex'
+        flexDirection: 'column'
+        alignItems: 'center'
     option:
         transition: 'all 250ms ease-in-out'
         padding: '0.15rem 1rem'
@@ -29,7 +67,7 @@ sheet = Jss.StyleSheet.create
             backgroundColor: 'white'
     options:
         transition: 'all 250ms ease-in-out'
-        backgroundColor: 'whitesmoke'
+        backgroundColor: 'lightgray'
         position: 'absolute'
         right: 0
         top: 0
@@ -43,12 +81,6 @@ sheet = Jss.StyleSheet.create
         '& span':
             padding: '0.2rem'
             textAlign: 'center'
-        # '& < div':
-        #     height: heightOfMenu
-        #     width: widthOfMenu
-        #     flexDirection:'row'
-        #     alignItems : 'center'
-        #     backgroundColor: 'skyblue'
         '&:hover':
             zIndex: 99999
             right: '-5rem'
@@ -61,48 +93,32 @@ sheet = Jss.StyleSheet.create
         display: 'flex'
         alignItems: 'center'
         justifyContent: 'center'
-        padding: '0.5em .9em 0.8em'
+        padding: '0.5em .9em 0.75em'
         borderRadius: '100vh'
         height: 'fit-content'
         outline: 'none'
+    null:
+        minHeight: dotHeight
+        display: 'flex'
+        alignItems: 'center'
+    text:
+        outline: 'none'
+        borderRadius: '1.5rem'
+        padding: '0.2rem 0.4rem'
+        border: '2px gray solid'
+    dotDotDot:
+        marginTop: '-0.2rem'
+        marginBottom: '0.2rem'
+    namedSlot:
+        display: 'flex'
+        flexDirection: 'column'
 
 classes = {}
 for each of sheet
     classes[each] = Jss.css(sheet[each])
 
-wrapperClass = Jss.css(sheet.wrapper)
-optionsClass = Jss.css(sheet.options)
-optionsContainerClass = Jss.css(sheet.optionsContainer)
-optionClass = Jss.css(sheet.option)
 
-# 
-# types
-# 
-    # every slot is one of:
-        # null
-        # number
-        # text
-        # list
-        # object
-    # every slot has 
-        # a type picker
-        # a value area
-        # a remove button
-    # lists have a "new item" button
-    # named lists have a "new item" button
-    
-wrapperStyle = {}
-areaStyle =
-    display: 'flex'
-    flexDirection: 'column'
-textStyle =
-    outline: 'none'
-    borderRadius: '1.5rem'
-    padding: '0.2rem 0.4rem'
-    border: '2px gray solid'
-
-
-Slot = newComponent(
+Slot = newComponent
     props:
         # TODO: connect each of these with their html counterparts
         props:
@@ -125,16 +141,42 @@ Slot = newComponent(
         value: ""
     
     methods:
-        newSlot: (postition) ->
+        newSlot: (position) ->
             theNewSlot = new Slot
             # tell the slot where it is
-            theNewSlot.location = [...this.location, postition]
+            theNewSlot.location = [...this.location, position]
             # when the slot changes, update the value of the parent
             theNewSlot.$on "value", (data) =>
                 position = theNewSlot.location[theNewSlot.location.length-1]
                 this.value[position] = data
             return theNewSlot
-    
+        
+        newNamedSlot: () ->
+            # TODO: finish this method
+            
+            # position = ""
+            # value = undefined
+            
+            # # slot 
+            # theNewSlot = new Slot
+            # # tell the slot where it is
+            # theNewSlot.location = [...this.location, position]
+            # # 
+            # updateValue = () ->
+            #     position.length && this.value[position] = theNewSlot.value
+            # # when the slot changes, update the value of the parent
+            # theNewSlot.$on "value", (data) =>
+            #     position = theNewSlot.location[theNewSlot.location.length-1]
+            #     this.value[position] = data
+            
+            # <div class={classes.namedSlot}>
+            #     <input oninput={(e) => 
+            #         position = e.target.value;
+            #         position.length && this.value[position] =  
+            #         }
+            #         />
+            #     <Slot />
+            # </div>
     watch:
         type: ()->
             console.log 'this.type =',this.type
@@ -143,29 +185,33 @@ Slot = newComponent(
                 when "Null"
                     this.value = null
                     this.area.children = [
-                        <span style={minHeight: dotHeight, display: 'flex', alignItems: 'center'} >Null</span>
+                        <span class={classes.null} >Null</span>
                     ]
                 when "Number" 
                     this.value = 0
                     this.area.children = [
-                        <input style={textStyle} type="number" value={0} oninput={(e)=>this.value = e.target.value} />
+                        <input class={classes.text} type="number" value={0} oninput={(e)=>this.value = e.target.value} />
                     ]
                 when "Text"
                     this.value = ""
                     this.area.children = [
-                        <input style={textStyle} value={this.value} oninput={(e)=>this.value = e.target.value -0} />
+                        <input class={classes.text} value={this.value} oninput={(e)=>this.value = e.target.value -0} />
                     ]
                 when "List" 
                     this.value = []
                     this.area.children = [
-                        <button class={classes.button} onclick={ (e)=> this.area.add(this.newSlot(this.area.children.length - 1)) }>
+                        this.listArea =  <div/>,
+                        <button class={classes.button} onclick={ (e)=> this.listArea.add(this.newSlot(this.listArea.children.length)) }>
                             +
                         </button>
                     ]
                 when "Named List" 
                     this.value = {}
                     this.area.children = [
-                        <div>Under construction</div>
+                        this.listArea =  <div/>,
+                        <button class={classes.button} onclick={ (e)=> this.listArea.add(this.newSlot(this.listArea.children.length)) }>
+                            +
+                        </button>
                     ]
         
         value: ()->
@@ -176,30 +222,30 @@ Slot = newComponent(
         
     dom: () ->
         window.thingy || window.thingy = this
-        <div class={wrapperClass}>
+        <div class={classes.wrapper}>
             {### main area ###}
             {this.area = 
-                <div style={areaStyle}>
-                    <input style={textStyle} value={this.value} oninput={(e)=>this.value = e.target.value} />
+                <div class={classes.area}>
+                    <input class={classes.text} value={this.value} oninput={(e)=>this.value = e.target.value} />
                 </div>
             }
             {### buttons ###}
             <div style={ position :'relative', width: '2.2rem'} >
                 {### type picker ###}
-                <div class={optionsClass}>
-                    <span style={marginTop: '-0.2rem', marginBottom: '0.2rem'} >...</span>
-                    <div class={optionsContainerClass}>
-                        <option class={optionClass} onclick={(e)=>this.type = e.target.innerHTML}>Null</option>
-                        <option class={optionClass} onclick={(e)=>this.type = e.target.innerHTML}>Number</option>
-                        <option class={optionClass} onclick={(e)=>this.type = e.target.innerHTML}>Text</option>
-                        <option class={optionClass} onclick={(e)=>this.type = e.target.innerHTML}>List</option>
-                        <option class={optionClass} onclick={(e)=>this.type = e.target.innerHTML}>Named List</option>
+                <div class={classes.options}>
+                    <span class={classes.dotDotDot} >...</span>
+                    <div>
+                        <option class={classes.option} onclick={(e)=>this.type = e.target.innerHTML}>Null</option>
+                        <option class={classes.option} onclick={(e)=>this.type = e.target.innerHTML}>Number</option>
+                        <option class={classes.option} onclick={(e)=>this.type = e.target.innerHTML}>Text</option>
+                        <option class={classes.option} onclick={(e)=>this.type = e.target.innerHTML}>List</option>
+                        <option class={classes.option} onclick={(e)=>this.type = e.target.innerHTML}>Named List</option>
                     </div>
                 </div>
                 {### delete button ###}
             </div>
         </div>
-)
+
 
 
 document.addEventListener "DOMContentLoaded", ()-> 

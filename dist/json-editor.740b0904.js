@@ -13168,9 +13168,36 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 (function () {
-  var Jss, Slot, areaStyle, classes, dotHeight, each, heightOfMenu, newComponent, optionClass, optionsClass, optionsContainerClass, sheet, textStyle, topPadding, widthOfMenu, wrapperClass, wrapperStyle;
+  var Jss, Slot, classes, dotHeight, each, heightOfMenu, newComponent, sheet, topPadding, widthOfMenu;
   newComponent = require('good-component');
-  Jss = require('aphrodite-jss'); // Styles
+  Jss = require('aphrodite-jss'); // types
+  // every slot is one of:
+  // null
+  // number
+  // text
+  // list
+  // object
+  // every slot has 
+  // a type picker
+  // a value area
+  // a remove button
+  // lists have a "new item" button
+  // named lists have a "new item" button
+  // TODO
+  // Delete functionality
+  // create the delete button and styles
+  // create the delete event
+  // create the listener for the event
+  // handle the re-indexing of elements in a list
+  // Named slots
+  // Change how the event handling of value works, add a location to the change
+  // Create the name input box
+  // Add the tracking of the sub value
+  // improve text boxes
+  // increase font size
+  // convert them to text-areas
+  // make them auto-expand
+  // Styles
 
   heightOfMenu = '9rem';
   widthOfMenu = '7rem';
@@ -13188,7 +13215,12 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       fontFamily: 'sans-serif',
       transition: 'all 500ms ease-in',
       margin: '0.3rem',
-      marginBottom: '1rem'
+      marginBottom: '0.8rem'
+    },
+    area: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
     },
     option: {
       transition: 'all 250ms ease-in-out',
@@ -13200,7 +13232,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     },
     options: {
       transition: 'all 250ms ease-in-out',
-      backgroundColor: 'whitesmoke',
+      backgroundColor: 'lightgray',
       position: 'absolute',
       right: 0,
       top: 0,
@@ -13215,12 +13247,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         padding: '0.2rem',
         textAlign: 'center'
       },
-      // '& < div':
-      //     height: heightOfMenu
-      //     width: widthOfMenu
-      //     flexDirection:'row'
-      //     alignItems : 'center'
-      //     backgroundColor: 'skyblue'
       '&:hover': {
         zIndex: 99999,
         right: '-5rem',
@@ -13235,10 +13261,29 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '0.5em .9em 0.8em',
+      padding: '0.5em .9em 0.75em',
       borderRadius: '100vh',
       height: 'fit-content',
       outline: 'none'
+    },
+    null: {
+      minHeight: dotHeight,
+      display: 'flex',
+      alignItems: 'center'
+    },
+    text: {
+      outline: 'none',
+      borderRadius: '1.5rem',
+      padding: '0.2rem 0.4rem',
+      border: '2px gray solid'
+    },
+    dotDotDot: {
+      marginTop: '-0.2rem',
+      marginBottom: '0.2rem'
+    },
+    namedSlot: {
+      display: 'flex',
+      flexDirection: 'column'
     }
   });
   classes = {};
@@ -13247,34 +13292,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     classes[each] = Jss.css(sheet[each]);
   }
 
-  wrapperClass = Jss.css(sheet.wrapper);
-  optionsClass = Jss.css(sheet.options);
-  optionsContainerClass = Jss.css(sheet.optionsContainer);
-  optionClass = Jss.css(sheet.option); // types
-  // every slot is one of:
-  // null
-  // number
-  // text
-  // list
-  // object
-  // every slot has 
-  // a type picker
-  // a value area
-  // a remove button
-  // lists have a "new item" button
-  // named lists have a "new item" button
-
-  wrapperStyle = {};
-  areaStyle = {
-    display: 'flex',
-    flexDirection: 'column'
-  };
-  textStyle = {
-    outline: 'none',
-    borderRadius: '1.5rem',
-    padding: '0.2rem 0.4rem',
-    border: '2px gray solid'
-  };
   Slot = newComponent({
     props: {
       // TODO: connect each of these with their html counterparts
@@ -13301,22 +13318,44 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       };
     },
     methods: {
-      newSlot: function newSlot(postition) {
+      newSlot: function newSlot(position) {
         var _this = this;
 
         var theNewSlot;
         theNewSlot = new Slot(); // tell the slot where it is
 
-        theNewSlot.location = _toConsumableArray(this.location).concat([postition]); // when the slot changes, update the value of the parent
+        theNewSlot.location = _toConsumableArray(this.location).concat([position]); // when the slot changes, update the value of the parent
 
         theNewSlot.$on("value", function (data) {
-          var position;
           position = theNewSlot.location[theNewSlot.location.length - 1];
           return _this.value[position] = data;
         });
         return theNewSlot;
-      }
+      },
+      newNamedSlot: function newNamedSlot() {}
     },
+    // TODO: finish this method
+    // position = ""
+    // value = undefined
+    // # slot 
+    // theNewSlot = new Slot
+    // # tell the slot where it is
+    // theNewSlot.location = [...this.location, position]
+    // # 
+    // updateValue = () ->
+    //     position.length && this.value[position] = theNewSlot.value
+    // # when the slot changes, update the value of the parent
+    // theNewSlot.$on "value", (data) =>
+    //     position = theNewSlot.location[theNewSlot.location.length-1]
+    //     this.value[position] = data
+    // <div class={classes.namedSlot}>
+    //     <input oninput={(e) => 
+    //         position = e.target.value;
+    //         position.length && this.value[position] =  
+    //         }
+    //         />
+    //     <Slot />
+    // </div>
     watch: {
       type: function type() {
         var _this2 = this;
@@ -13327,17 +13366,13 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           case "Null":
             this.value = null;
             return this.area.children = [React.createElement("span", {
-              style: {
-                minHeight: dotHeight,
-                display: 'flex',
-                alignItems: 'center'
-              }
+              class: classes.null
             }, "Null")];
 
           case "Number":
             this.value = 0;
             return this.area.children = [React.createElement("input", {
-              style: textStyle,
+              class: classes.text,
               type: "number",
               value: 0,
               oninput: function oninput(e) {
@@ -13348,7 +13383,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           case "Text":
             this.value = "";
             return this.area.children = [React.createElement("input", {
-              style: textStyle,
+              class: classes.text,
               value: this.value,
               oninput: function oninput(e) {
                 return _this2.value = e.target.value(-0);
@@ -13357,16 +13392,21 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
           case "List":
             this.value = [];
-            return this.area.children = [React.createElement("button", {
+            return this.area.children = [this.listArea = React.createElement("div", null), React.createElement("button", {
               class: classes.button,
               onclick: function onclick(e) {
-                return _this2.area.add(_this2.newSlot(_this2.area.children.length - 1));
+                return _this2.listArea.add(_this2.newSlot(_this2.listArea.children.length));
               }
             }, "+")];
 
           case "Named List":
             this.value = {};
-            return this.area.children = [React.createElement("div", null, "Under construction")];
+            return this.area.children = [this.listArea = React.createElement("div", null), React.createElement("button", {
+              class: classes.button,
+              onclick: function onclick(e) {
+                return _this2.listArea.add(_this2.newSlot(_this2.listArea.children.length));
+              }
+            }, "+")];
         }
       },
       value: function value() {
@@ -13380,11 +13420,11 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       window.thingy || (window.thingy = this);
       return React.createElement("div", {
-        class: wrapperClass
+        class: classes.wrapper
       }, this.area = React.createElement("div", {
-        style: areaStyle
+        class: classes.area
       }, React.createElement("input", {
-        style: textStyle,
+        class: classes.text,
         value: this.value,
         oninput: function oninput(e) {
           return _this3.value = e.target.value;
@@ -13395,36 +13435,31 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           width: '2.2rem'
         }
       }, React.createElement("div", {
-        class: optionsClass
+        class: classes.options
       }, React.createElement("span", {
-        style: {
-          marginTop: '-0.2rem',
-          marginBottom: '0.2rem'
-        }
-      }, "..."), React.createElement("div", {
-        class: optionsContainerClass
-      }, React.createElement("option", {
-        class: optionClass,
+        class: classes.dotDotDot
+      }, "..."), React.createElement("div", null, React.createElement("option", {
+        class: classes.option,
         onclick: function onclick(e) {
           return _this3.type = e.target.innerHTML;
         }
       }, "Null"), React.createElement("option", {
-        class: optionClass,
+        class: classes.option,
         onclick: function onclick(e) {
           return _this3.type = e.target.innerHTML;
         }
       }, "Number"), React.createElement("option", {
-        class: optionClass,
+        class: classes.option,
         onclick: function onclick(e) {
           return _this3.type = e.target.innerHTML;
         }
       }, "Text"), React.createElement("option", {
-        class: optionClass,
+        class: classes.option,
         onclick: function onclick(e) {
           return _this3.type = e.target.innerHTML;
         }
       }, "List"), React.createElement("option", {
-        class: optionClass,
+        class: classes.option,
         onclick: function onclick(e) {
           return _this3.type = e.target.innerHTML;
         }
@@ -13462,7 +13497,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50567" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62749" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
