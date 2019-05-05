@@ -1,0 +1,31 @@
+{
+  "name": "json-editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "parcel test/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeff-hykin/json-editor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeff-hykin/json-editor/issues"
+  },
+  "homepage": "https://github.com/jeff-hykin/json-editor#readme",
+  "dependencies": {
+    "good-component": "^1.0.1",
+    "good-jsx": "^1.0.8",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "babel-preset-env": "^1.7.0",
+    "coffeescript": "^2.4.1"
+  }
+}
