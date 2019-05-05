@@ -24,6 +24,7 @@ wrapperStyle =
     borderRadius: '2rem'
     width: 'fit-content'
     padding: '0 .5rem'
+    fontFamily: 'sans-serif'
 selectStyle = 
     margin: "1rem"
 areaStyle = 
@@ -89,6 +90,4 @@ Slot = newComponent(
         </div>
 )
 
-document.body = <body>
-    <Slot />
-</body>
+document.body.add <Slot />
