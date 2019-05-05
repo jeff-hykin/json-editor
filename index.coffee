@@ -4,6 +4,10 @@ Jss = require 'aphrodite-jss'
 # 
 # Styles
 # 
+heightOfMenu = '9rem'
+widthOfMenu = '7rem'
+topPadding = '1.2rem'
+dotHeight = '1.7rem'
 sheet = Jss.StyleSheet.create
     wrapper: 
         display: 'flex'
@@ -12,13 +16,64 @@ sheet = Jss.StyleSheet.create
         boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
         borderRadius: '1.8rem'
         width: 'fit-content'
-        padding: '0 .5rem'
+        padding: topPadding + ' 1rem'
         fontFamily: 'sans-serif'
         transition: 'all 500ms ease-in'
         margin: '0.3rem'
         marginBottom: '1rem'
+    option:
+        transition: 'all 250ms ease-in-out'
+        padding: '0.15rem 1rem'
+        width: '100%'
+        '&:hover':
+            backgroundColor: 'white'
+    options:
+        transition: 'all 250ms ease-in-out'
+        backgroundColor: 'whitesmoke'
+        position: 'absolute'
+        right: 0
+        top: 0
+        display: "flex"
+        flexDirection: 'column'
+        borderRadius: '2rem'
+        overflow: 'hidden'
+        maxWidth:  dotHeight
+        maxHeight: dotHeight
+        padding: '0rem'
+        '& span':
+            padding: '0.2rem'
+            textAlign: 'center'
+        # '& < div':
+        #     height: heightOfMenu
+        #     width: widthOfMenu
+        #     flexDirection:'row'
+        #     alignItems : 'center'
+        #     backgroundColor: 'skyblue'
+        '&:hover':
+            zIndex: 99999
+            right: '-5rem'
+            top: '-'+topPadding
+            paddingBottom: '1rem'
+            maxHeight: heightOfMenu
+            maxWidth: widthOfMenu
+    button:
+        width: 'fit-content'
+        display: 'flex'
+        alignItems: 'center'
+        justifyContent: 'center'
+        padding: '0.5em .9em 0.8em'
+        borderRadius: '100vh'
+        height: 'fit-content'
+        outline: 'none'
+
+classes = {}
+for each of sheet
+    classes[each] = Jss.css(sheet[each])
 
 wrapperClass = Jss.css(sheet.wrapper)
+optionsClass = Jss.css(sheet.options)
+optionsContainerClass = Jss.css(sheet.optionsContainer)
+optionClass = Jss.css(sheet.option)
 
 # 
 # types
@@ -37,10 +92,9 @@ wrapperClass = Jss.css(sheet.wrapper)
     # named lists have a "new item" button
     
 wrapperStyle = {}
-selectStyle = 
-    margin: "1rem"
-areaStyle = 
-    padding: "1rem"
+areaStyle =
+    display: 'flex'
+    flexDirection: 'column'
 textStyle =
     outline: 'none'
     borderRadius: '1.5rem'
@@ -73,7 +127,6 @@ Slot = newComponent(
     methods:
         newSlot: (postition) ->
             theNewSlot = new Slot
-            console.log 'theNewSlot =',theNewSlot
             # tell the slot where it is
             theNewSlot.location = [...this.location, postition]
             # when the slot changes, update the value of the parent
@@ -90,7 +143,7 @@ Slot = newComponent(
                 when "Null"
                     this.value = null
                     this.area.children = [
-                        <span>Null</span>
+                        <span style={minHeight: dotHeight, display: 'flex', alignItems: 'center'} >Null</span>
                     ]
                 when "Number" 
                     this.value = 0
@@ -105,12 +158,7 @@ Slot = newComponent(
                 when "List" 
                     this.value = []
                     this.area.children = [
-                        <button
-                            onclick={ (e)=> 
-                                console.log 'this.newSlot =',this.newSlot
-                                this.area.add(this.newSlot(this.area.children.length - 1))
-                            }
-                            >
+                        <button class={classes.button} onclick={ (e)=> this.area.add(this.newSlot(this.area.children.length - 1)) }>
                             +
                         </button>
                     ]
@@ -127,22 +175,29 @@ Slot = newComponent(
         
         
     dom: () ->
-        window.thingy = this
-        <div class={wrapperClass} style={wrapperStyle} >
-            {this.dropdown = 
-                <select style={selectStyle} name="Type" onchange={()=>this.type = this.dropdown.value}>
-                    <option                    >Null</option>
-                    <option                    >Number</option>
-                    <option selected="selected">Text</option>
-                    <option                    >List</option>
-                    <option                    >Named List</option>
-                </select>
-            }
+        window.thingy || window.thingy = this
+        <div class={wrapperClass}>
+            {### main area ###}
             {this.area = 
                 <div style={areaStyle}>
                     <input style={textStyle} value={this.value} oninput={(e)=>this.value = e.target.value} />
                 </div>
             }
+            {### buttons ###}
+            <div style={ position :'relative', width: '2.2rem'} >
+                {### type picker ###}
+                <div class={optionsClass}>
+                    <span style={marginTop: '-0.2rem', marginBottom: '0.2rem'} >...</span>
+                    <div class={optionsContainerClass}>
+                        <option class={optionClass} onclick={(e)=>this.type = e.target.innerHTML}>Null</option>
+                        <option class={optionClass} onclick={(e)=>this.type = e.target.innerHTML}>Number</option>
+                        <option class={optionClass} onclick={(e)=>this.type = e.target.innerHTML}>Text</option>
+                        <option class={optionClass} onclick={(e)=>this.type = e.target.innerHTML}>List</option>
+                        <option class={optionClass} onclick={(e)=>this.type = e.target.innerHTML}>Named List</option>
+                    </div>
+                </div>
+                {### delete button ###}
+            </div>
         </div>
 )
 

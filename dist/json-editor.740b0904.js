@@ -13168,10 +13168,14 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 (function () {
-  var Jss, Slot, areaStyle, newComponent, selectStyle, sheet, textStyle, wrapperClass, wrapperStyle;
+  var Jss, Slot, areaStyle, classes, dotHeight, each, heightOfMenu, newComponent, optionClass, optionsClass, optionsContainerClass, sheet, textStyle, topPadding, widthOfMenu, wrapperClass, wrapperStyle;
   newComponent = require('good-component');
   Jss = require('aphrodite-jss'); // Styles
 
+  heightOfMenu = '9rem';
+  widthOfMenu = '7rem';
+  topPadding = '1.2rem';
+  dotHeight = '1.7rem';
   sheet = Jss.StyleSheet.create({
     wrapper: {
       display: 'flex',
@@ -13180,14 +13184,73 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
       borderRadius: '1.8rem',
       width: 'fit-content',
-      padding: '0 .5rem',
+      padding: topPadding + ' 1rem',
       fontFamily: 'sans-serif',
       transition: 'all 500ms ease-in',
       margin: '0.3rem',
       marginBottom: '1rem'
+    },
+    option: {
+      transition: 'all 250ms ease-in-out',
+      padding: '0.15rem 1rem',
+      width: '100%',
+      '&:hover': {
+        backgroundColor: 'white'
+      }
+    },
+    options: {
+      transition: 'all 250ms ease-in-out',
+      backgroundColor: 'whitesmoke',
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      display: "flex",
+      flexDirection: 'column',
+      borderRadius: '2rem',
+      overflow: 'hidden',
+      maxWidth: dotHeight,
+      maxHeight: dotHeight,
+      padding: '0rem',
+      '& span': {
+        padding: '0.2rem',
+        textAlign: 'center'
+      },
+      // '& < div':
+      //     height: heightOfMenu
+      //     width: widthOfMenu
+      //     flexDirection:'row'
+      //     alignItems : 'center'
+      //     backgroundColor: 'skyblue'
+      '&:hover': {
+        zIndex: 99999,
+        right: '-5rem',
+        top: '-' + topPadding,
+        paddingBottom: '1rem',
+        maxHeight: heightOfMenu,
+        maxWidth: widthOfMenu
+      }
+    },
+    button: {
+      width: 'fit-content',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '0.5em .9em 0.8em',
+      borderRadius: '100vh',
+      height: 'fit-content',
+      outline: 'none'
     }
   });
-  wrapperClass = Jss.css(sheet.wrapper); // types
+  classes = {};
+
+  for (each in sheet) {
+    classes[each] = Jss.css(sheet[each]);
+  }
+
+  wrapperClass = Jss.css(sheet.wrapper);
+  optionsClass = Jss.css(sheet.options);
+  optionsContainerClass = Jss.css(sheet.optionsContainer);
+  optionClass = Jss.css(sheet.option); // types
   // every slot is one of:
   // null
   // number
@@ -13202,11 +13265,9 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   // named lists have a "new item" button
 
   wrapperStyle = {};
-  selectStyle = {
-    margin: "1rem"
-  };
   areaStyle = {
-    padding: "1rem"
+    display: 'flex',
+    flexDirection: 'column'
   };
   textStyle = {
     outline: 'none',
@@ -13244,8 +13305,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         var _this = this;
 
         var theNewSlot;
-        theNewSlot = new Slot();
-        console.log('theNewSlot =', theNewSlot); // tell the slot where it is
+        theNewSlot = new Slot(); // tell the slot where it is
 
         theNewSlot.location = _toConsumableArray(this.location).concat([postition]); // when the slot changes, update the value of the parent
 
@@ -13266,7 +13326,13 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         switch (this.type) {
           case "Null":
             this.value = null;
-            return this.area.children = [React.createElement("span", null, "Null")];
+            return this.area.children = [React.createElement("span", {
+              style: {
+                minHeight: dotHeight,
+                display: 'flex',
+                alignItems: 'center'
+              }
+            }, "Null")];
 
           case "Number":
             this.value = 0;
@@ -13292,8 +13358,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           case "List":
             this.value = [];
             return this.area.children = [React.createElement("button", {
+              class: classes.button,
               onclick: function onclick(e) {
-                console.log('this.newSlot =', _this2.newSlot);
                 return _this2.area.add(_this2.newSlot(_this2.area.children.length - 1));
               }
             }, "+")];
@@ -13312,19 +13378,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     dom: function dom() {
       var _this3 = this;
 
-      window.thingy = this;
+      window.thingy || (window.thingy = this);
       return React.createElement("div", {
-        class: wrapperClass,
-        style: wrapperStyle
-      }, this.dropdown = React.createElement("select", {
-        style: selectStyle,
-        name: "Type",
-        onchange: function onchange() {
-          return _this3.type = _this3.dropdown.value;
-        }
-      }, React.createElement("option", null, "Null"), React.createElement("option", null, "Number"), React.createElement("option", {
-        selected: "selected"
-      }, "Text"), React.createElement("option", null, "List"), React.createElement("option", null, "Named List")), this.area = React.createElement("div", {
+        class: wrapperClass
+      }, this.area = React.createElement("div", {
         style: areaStyle
       }, React.createElement("input", {
         style: textStyle,
@@ -13332,7 +13389,46 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         oninput: function oninput(e) {
           return _this3.value = e.target.value;
         }
-      })));
+      })), React.createElement("div", {
+        style: {
+          position: 'relative',
+          width: '2.2rem'
+        }
+      }, React.createElement("div", {
+        class: optionsClass
+      }, React.createElement("span", {
+        style: {
+          marginTop: '-0.2rem',
+          marginBottom: '0.2rem'
+        }
+      }, "..."), React.createElement("div", {
+        class: optionsContainerClass
+      }, React.createElement("option", {
+        class: optionClass,
+        onclick: function onclick(e) {
+          return _this3.type = e.target.innerHTML;
+        }
+      }, "Null"), React.createElement("option", {
+        class: optionClass,
+        onclick: function onclick(e) {
+          return _this3.type = e.target.innerHTML;
+        }
+      }, "Number"), React.createElement("option", {
+        class: optionClass,
+        onclick: function onclick(e) {
+          return _this3.type = e.target.innerHTML;
+        }
+      }, "Text"), React.createElement("option", {
+        class: optionClass,
+        onclick: function onclick(e) {
+          return _this3.type = e.target.innerHTML;
+        }
+      }, "List"), React.createElement("option", {
+        class: optionClass,
+        onclick: function onclick(e) {
+          return _this3.type = e.target.innerHTML;
+        }
+      }, "Named List")))));
     }
   });
   document.addEventListener("DOMContentLoaded", function () {
@@ -13366,7 +13462,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55542" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50567" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
