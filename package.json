@@ -1,6 +1,6 @@
 {
     "name": "edit-json-vue",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "private": false,
     "description": "A simple way to edit json objects",
     "main": "dist/index.js",
@@ -28,6 +28,5 @@
         "vue-template-compiler": "^2.6.10",
         "@babel/plugin-proposal-export-default-from": "^7.7.4"
     },
-    "dependencies": {
-    }
+    "dependencies": {}
 }
