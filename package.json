@@ -10,15 +10,15 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/jeff-hykin/good-vue.git"
+        "url": "git+https://github.com/jeff-hykin/json-editor.git"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/jeff-hykin/good-vue/issues"
+        "url": "https://github.com/jeff-hykin/json-editor/issues"
     },
-    "homepage": "https://github.com/jeff-hykin/good-vue#readme",
+    "homepage": "https://github.com/jeff-hykin/json-editor#readme",
     "files": [
         "dist/*"
     ],
