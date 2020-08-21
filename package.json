@@ -1,6 +1,6 @@
 {
     "name": "edit-json-vue",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "private": false,
     "description": "A simple way to edit json objects",
     "main": "dist/index.js",
