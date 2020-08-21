@@ -40,7 +40,7 @@ export default {
     margin: 1rem;
     margin-top: 2rem;
 }
-[add-button-fh3935] {
+[add-button-fh3935], [json-root-fni18943] [json-list-fh3935] > button[add-button-fh3935] {
     --add-color: #81c784; 
     margin: 0;
     background: transparent;
