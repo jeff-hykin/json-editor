@@ -6,39 +6,27 @@
 </template>
 
 <script>
+import jsonValue from "./jsonValue"
+import {clearAllOldActiveTabs} from "./jsonValue"
 
-// a really jank workaround because the bundler isn't working correctly
-// ideally jsonValue and clearAllOldActiveTabs would just be imported
-// BUT they're a recursive import which breaks the bundler
-let exportObj = {
+export default {
     name: "jsonRoot",
-}
-export let setup = (jsonValue, clearAllOldActiveTabs) => {
-    let dynamicInternals = {
-        components: {
-            jsonValue,
-        },
-        mounted() {
-        },
-        methods: {
-            changeHandler(...args) {
-                if (this.$listeners.changeValue instanceof Function) {
-                    this.$listeners.changeValue(...args)
-                }
-            },
-            onMouseLeave(eventObj) {
-                clearAllOldActiveTabs()
+    components: {
+        jsonValue
+    },
+    mounted() {
+    },
+    methods: {
+        changeHandler(...args) {
+            if (this.$listeners.changeValue instanceof Function) {
+                this.$listeners.changeValue(...args)
             }
+        },
+        onMouseLeave(eventObj) {
+            clearAllOldActiveTabs()
         }
     }
-    for (let each in dynamicInternals) {
-        exportObj[each] = dynamicInternals[each]
-    }
-    return exportObj
 }
-
-
-export default exportObj
 </script>
 
 <style lang="scss">
