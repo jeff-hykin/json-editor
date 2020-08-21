@@ -5,8 +5,7 @@
     "description": "A simple way to edit json objects",
     "main": "dist/index.js",
     "scripts": {
-        "build": "npx bili --bundle-node-modules",
-        "publish": "npm run build; (git add -A; git commit -m '-'; git pull && git push; npm version patch)"
+        "build": "npx bili --bundle-node-modules"
     },
     "repository": {
         "type": "git",
