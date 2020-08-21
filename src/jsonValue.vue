@@ -12,7 +12,9 @@
         <!-- Display Value -->
         <div value-bubble-285hg2u44 :type="type" :isKeyed="$attrs.isKeyed">
             <!-- for keys -->
-            <slot />
+            <div isKey>
+                <slot />
+            </div>
             
             <!-- TODO: allow a restrictions argument -->
             <!-- Edit Value -->
@@ -386,7 +388,7 @@ export default {
             
             
             // the key
-            & > input {
+            & > div[isKey] > input {
                 margin: 0 1rem;
                 border-top: none;
                 border-left: none;
@@ -400,12 +402,8 @@ export default {
                 background: transparent;
                 box-shadow: none;
                 
-                // &[type="Object"] [json-value-container-fni18943][type="Object"], &[type="List"] [json-value-container-fni18943][type="List"], {
-                //     padding-top: 0rem;
-                // }
-                
                 // the key
-                & > input {
+                & > div[isKey] > input {
                     margin: 0 1rem;
                     border-top: none;
                     border-left: none;
@@ -414,21 +412,9 @@ export default {
                     height: 1.2em;
                     width: var(--min-input-width);
                 }
-                
-                // &[type="Object"], &[type="List"] {
-                //     & > input {
-                //         background: white;
-                //         border-radius: 1rem;
-                //         padding: 0.3em 0.8em;
-                //         box-sizing: content-box;
-                //         align-self: flex-start;
-                //         margin-top: 2rem;
-                //     }
-                // }
             }
             
             [json-value-container-fni18943]  {
-                margin-top: -1px;
                 --primitive-value-width: 10rem;
                 --primitive-value-padding: 1.5rem;
                 
