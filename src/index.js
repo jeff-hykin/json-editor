@@ -1,16 +1,15 @@
-import Column from "./column.vue"
-import Row from "./row.vue"
-import Container from "./container.vue"
-import { setupGlobalData } from "./utils"
+import jsonValue from "./jsonValue.vue"
+import {clearAllOldActiveTabs} from "./jsonValue.vue"
+import jsonList from "./jsonList.vue"
+import jsonObject from "./jsonObject.vue"
+import jsonKeyValue from "./jsonKeyValue.vue"
+import { setup } from "./jsonRoot.vue"
+let jsonRoot = setup(jsonValue, clearAllOldActiveTabs)
 
 export default {
-    setupGlobalData,
-    windowListenersMixin,
     install(Vue, options) {
         // Let's register our component globally
         // https://vuejs.org/v2/guide/components-registration.html
-        Vue.component("column", Column)
-        Vue.component("row", Row)
-        Vue.component("container", Container)
+        Vue.component("JsonEditor", jsonRoot)
     },
 }
