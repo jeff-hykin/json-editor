@@ -10,10 +10,11 @@
 // a really jank workaround because the bundler isn't working correctly
 // ideally jsonValue and clearAllOldActiveTabs would just be imported
 // BUT they're a recursive import which breaks the bundler
-let exportObj = {}
+let exportObj = {
+    name: "jsonRoot",
+}
 export let setup = (jsonValue, clearAllOldActiveTabs) => {
     let dynamicInternals = {
-        name: "jsonRoot",
         components: {
             jsonValue,
         },
