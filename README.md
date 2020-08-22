@@ -14,8 +14,24 @@ You can use the arrow keys to switch between the types (Null, Number, String, Li
 
 Inside your .vue file:
 ```vue
+<template>
+    <JsonRoot @changeValue="newJsonValue" />
+</template>
+
+<script>
 let JsonEditor = require("edit-json-vue/src/jsonRoot.vue").default
 export default {
     components: { JsonEditor },
+    data: ()=>({
+        jsonValue,
+    }),
+    methods: {
+        newJsonValue(value) {
+            this.jsonValue = value
+            console.log(`The user edited the value!`)
+            console.log(`Now the value is: ${this.jsonValue}`)
+        }
+    }
 }
+</script>
 ```
