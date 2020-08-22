@@ -36,10 +36,6 @@ export default {
     --shadow: 3.5px 7.5px 18px -13px rgba(71, 71, 71, 0.82);
     --tub-shadow: inset 3.5px 7.5px 18px -13px rgba(71, 71, 71, 0.82);
 }
-[json-root-fni18943][override-fni18943] {
-    margin: 1rem;
-    margin-top: 2rem;
-}
 [add-button-fh3935], [json-root-fni18943] [json-list-fh3935] > button[add-button-fh3935] {
     --add-color: #81c784; 
     margin: 0;
